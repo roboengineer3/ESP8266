@@ -1,0 +1,43 @@
+/* Comment this out to disable prints and save space */
+#define BLYNK_PRINT Serial
+
+/* Fill in information from Blynk Device Info here */
+#define BLYNK_TEMPLATE_ID "TMPL3my5gMz2K"
+#define BLYNK_TEMPLATE_NAME "IoT LED"
+#define BLYNK_AUTH_TOKEN "YRwVIDWFLeup6zohujZ-F_DRTmRBljEG"
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "roboengineer";
+char pass[] = "Jio@1235";
+
+// Define relay pin
+#define RELAY_PIN 2  // GPIO2 (D4 on most ESP8266 boards)
+
+void setup()
+{
+  // Debug console
+  Serial.begin(115200);
+  delay(100);
+
+  // Set relay pin as output
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW); // Default to OFF state
+
+  // Connecting to WiFi and Blynk
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+}
+
+// Blynk virtual pin function to control relay
+BLYNK_WRITE(V1) {
+  int relayState = param.asInt();
+  digitalWrite(RELAY_PIN, relayState);
+}
+
+void loop()
+{
+  Blynk.run();
+}
